@@ -7,11 +7,11 @@ from strands_tools import http_request
 
 # Create a specialized agent with HTTP request capabilities
 # Parameters:
-#   - model: Specifies which LLM to use (Claude 3.5 Sonnet in this case)
+#   - model: Specifies which LLM to use
 #   - system_prompt: Defines the agent's role, expertise, and response guidelines
 #   - tools: List of tools the agent can use (http_request in this case)
 dog_breed_helper = Agent(
-    model="us.anthropic.claude-3-5-sonnet-20241022-v2:0",  # Specifies the Claude 3.5 Sonnet model
+    model="amazon.nova-pro-v1:0",
     system_prompt="""You are a dog breed expert specializing
     in helping new pet parents decide what breed meets their lifestyles. Your expertise
     covers dog behavior, dog training, basic veterinary care, and dog breed standards.
@@ -23,8 +23,11 @@ dog_breed_helper = Agent(
     4. Avoid jargon, but indicate when complex concepts are important
     
     Your goal is to help pet parents make an informed decision about their choice in a dog.
+    
+    IMPORTANT: When making HTTP requests, always include a User-Agent header
+    (e.g. "StrandsAgent/1.0") to comply with website robot policies.
     """,
-    tools=[http_request]  # Enables the agent to make HTTP requests to fetch information
+    tools=[http_request]
 )
 
 # Define a multi-line query string that includes a request requiring internet access
