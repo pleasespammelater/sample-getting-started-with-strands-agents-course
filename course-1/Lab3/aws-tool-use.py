@@ -1,6 +1,7 @@
 # Import necessary libraries
 import os                                     # For accessing environment variables
 from strands import Agent                    # Import the Agent class from strands library
+from strands.models import BedrockModel
 from strands.models.anthropic import AnthropicModel  # Import Anthropic's language model
 from strands_tools import use_aws           # Import the AWS tool for interacting with AWS services
 from dotenv import load_dotenv               # For loading environment variables from .env file
@@ -8,22 +9,21 @@ from dotenv import load_dotenv               # For loading environment variables
 load_dotenv()
 
 # Configure the Anthropic language model (Claude)
-model = AnthropicModel(
-    # Set up authentication using API key from environment variables
-    client_args={
-        "api_key": os.getenv("api_key"),  # Get API key from environment variables
-    },
-    # **model_config
-    max_tokens=1028,                    # Set maximum response length to 1028 tokens
-    model_id="claude-sonnet-4-20250514",  # Specify which Claude model version to use
-    params={
-        "temperature": 0.3,              # Set temperature to 0.3 (lower values make output more deterministic)
-    }
-)
+# model = AnthropicModel(
+#     # Set up authentication using API key from environment variables
+#     # **model_config
+#     max_tokens=1028,                    # Set maximum response length to 1028 tokens
+#     model_id="claude-sonnet-4-20250514",  # Specify which Claude model version to use
+#     params={
+#         "temperature": 0.3,              # Set temperature to 0.3 (lower values make output more deterministic)
+#     }
+# )
+
+bedrock_model = BedrockModel(model_id="amazon.nova-pro-v1:0")
 
 # Create an AI agent with AWS capabilities
 agent = Agent(
-    model=model,                      # Use the Anthropic model configured above
+    model=bedrock_model,                      # Use the Anthropic model configured above
     tools=[use_aws]                   # Give the agent access to AWS tools for interacting with AWS services
 )
 
