@@ -17,12 +17,13 @@ from mcp.client.streamable_http import streamablehttp_client
 from mcp.server import FastMCP
 from strands import Agent
 from strands.tools.mcp.mcp_client import MCPClient
+from strands.models import BedrockModel
 from strands.models.anthropic import AnthropicModel
 from dotenv import load_dotenv               # For loading environment variables from .env file
 
 load_dotenv()
 
-model = AnthropicModel(
+anthropic_model = AnthropicModel(
     client_args={
         "api_key": os.getenv("api_key"),  # Get API key from environment variables
     },
@@ -34,6 +35,7 @@ model = AnthropicModel(
     }
 )
 
+bedrock_model = BedrockModel(model_id="amazon.nova-pro-v1:0")
 
 def start_calculator_server():
     """
@@ -154,7 +156,7 @@ def main():
         print(f"Available MCP tools: {[tool.tool_name for tool in tools]}")
 
         # Create an agent with the MCP tools
-        agent = Agent(model=model,system_prompt=system_prompt, tools=tools)
+        agent = Agent(model=bedrock_model,system_prompt=system_prompt, tools=tools)
 
         # Interactive loop
         print("\nCalculator Agent Ready! Type 'exit' to quit.\n")
